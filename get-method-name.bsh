@@ -1,0 +1,33 @@
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+void getMethodName()
+{
+	selectionString = textArea.getSelectedText();
+	if(selectionString == null){
+		return;
+	}
+	
+	StringBuilder sb = new StringBuilder();
+	Pattern getMethodPattern = Pattern.compile(".*\\b+(\\w+)\\(.*");
+	Matcher matcher = getMethodPattern.matcher(selectionString);
+	while(matcher.find()){
+		String methodName = matcher.group(1);
+		sb.append(methodName + "\n");
+	}
+	
+	selections = textArea.getSelectedLines();
+	if(selections.length == 0){
+		selections = new int [] {textArea.getCaretLine()};
+	}
+	start = textArea.getLineStartOffset(selections[0]);
+	stop = textArea.getLineEndOffset(selections[selections.length-1]);
+	
+	buffer.insert(stop-1, "\n"+sb.toString());
+}
+
+void log(str){
+	Log.log(Log.DEBUG, BeanShell.class, str);
+}
+
+getMethodName();
